@@ -1,25 +1,39 @@
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
+import { useDispatch, useSelector } from 'react-redux';
+import Login from './pages/auth/Login';
+import Register from './pages/auth/Register';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const { isLoggedIn } = useSelector((state) => state.auth);
+	const [isUserLoggedIn, setisUserLoggedIn] = useState(isLoggedIn);
+
+	useEffect(() => {}, [isUserLoggedIn]);
+
+	useEffect(() => {
+		setisUserLoggedIn(isLoggedIn);
+	}, [isLoggedIn]);
+
+	console.log(isUserLoggedIn);
+
+	if (isUserLoggedIn) {
+		return (
+			<>
+				<h1>We are logged in</h1>
+			</>
+		);
+	}
+
+	return (
+		<>
+			<Routes>
+				<Route path='*' element={<Navigate to='/account/login' replace />} />
+				<Route exact path='/account/login' element={<Login />} />
+				<Route exact path='/account/register' element={<Register />} />
+			</Routes>
+		</>
+	);
 }
 
 export default App;
